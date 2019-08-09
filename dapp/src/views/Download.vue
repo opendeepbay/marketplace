@@ -114,7 +114,7 @@ export default {
     return {
       wxTip: false,
       config: {
-        localApp: "cmtwallettest://dapp?url="
+        localApp: "cmtwallet://dapp?url="
       }
     };
   },
