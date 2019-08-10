@@ -21,7 +21,7 @@ export default {
   USDaddr: "0x9ae9de5eb56fe212a3088fb636349553ca60f238",
   USDunit: "USDO",
   USDBuyLink:
-    "http://stripe-stablecoin.ufn3g4prnu.ap-northeast-1.elasticbeanstalk.com/checkout?currency=usd&desc=test&contract_addr=",
+    "https://stripe.supernodecapital.com/checkout?currency=usd&desc=test&contract_addr=",
   escrowPeriod: 60 * 60 * 24 * 21,
   HttpProvider: "https://rpc.cybermiles.io:8545",
   DAOaddr: "0xFad845108A5fce593a8Ff9d2BeC6c812DEE27661",
