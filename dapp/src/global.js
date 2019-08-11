@@ -13,7 +13,7 @@ Vue.use(VueAnalytics, {
 });
 
 export default {
-  popularTags: ["CMT", "BTC", "phone", "watch"],
+  popularTags: ["crypto", "pokemon", "phone", "watch", "toy"],
   abiShaList:
     "0xf2d55a1e2ceaf0e1511115e100490464fcb8d62993860c1251bd0c56fa16df9a",
   eeEndpoint: "https://openbay.search.secondstate.io/api/es_search",
