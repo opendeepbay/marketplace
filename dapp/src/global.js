@@ -26,7 +26,10 @@ export default {
   HttpProvider: "https://rpc.cybermiles.io:8545",
   DAOaddr: "0xFad845108A5fce593a8Ff9d2BeC6c812DEE27661",
   ProductName: "OpenBay",
-  USDOsupportEmail: "usdo@supernodecapital.com"
+  USDOsupportEmail: "usdo@supernodecapital.com",
+  badGuys: [
+    "0x304d667F6EF83D699091A2e85661C06E2f1e44dc"
+  ]
 };
 
 function createHandler(contract, obj, bin, fromUser, that) {
