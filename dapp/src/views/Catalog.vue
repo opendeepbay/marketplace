@@ -46,7 +46,7 @@
             }"
             :sold="good.sold ? true : ``"
           >
-            <RespImg v-bind:src="good.image" alt="" />
+            <RespImg v-bind:src="good.image" alt="" division="2" />
             <template v-slot:price>
               ${{ good.price }}
             </template>
@@ -178,7 +178,7 @@ export default {
             image: item.functionData.info[6].split(",")[0],
             price: (parseInt(item.functionData.info[7]) / 100).toString(),
             contractAddr: item.contractAddress,
-            itle: refactorListingTitle(item.functionData.info[1]),
+            title: refactorListingTitle(item.functionData.info[1]),
             sold: item.functionData.info[0] == 1 ? false : true
           });
         });

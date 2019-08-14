@@ -25,7 +25,8 @@ export default {
   escrowPeriod: 60 * 60 * 24 * 21,
   HttpProvider: "https://rpc.cybermiles.io:8545",
   DAOaddr: "0xFad845108A5fce593a8Ff9d2BeC6c812DEE27661",
-  ProductName: "OpenBay"
+  ProductName: "OpenBay",
+  USDOsupportEmail: "usdo@supernodecapital.com"
 };
 
 function createHandler(contract, obj, bin, fromUser, that) {

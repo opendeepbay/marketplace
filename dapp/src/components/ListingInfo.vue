@@ -1,7 +1,11 @@
 <template>
   <div class="listing-info">
-    <div class="main">
-      <RespImg v-bind:src="headImg" v-bind:alt="ProductInfo.desc" />
+    <div class="main" :style="{ height: headImgWidth + 'px' }" @click="showFullPic()">
+      <RespImg
+        v-bind:src="headImg"
+        v-bind:alt="ProductInfo.desc"
+        v-bind:division="1"
+      />
       <div class="goods-price">
         <span>$ {{ ProductInfo.USDprice }}</span>
       </div>
@@ -14,7 +18,7 @@
           :key="image.key"
           @click="headImg = image"
         >
-          <RespImg v-bind:src="image" />
+          <RespImg v-bind:src="image" v-bind:division="6" />
         </div>
       </div>
       <h1 class="wrap-text">{{ ProductInfo.title }}</h1>
@@ -128,6 +132,14 @@ export default {
                   document.title = `${that.ProductInfo.title} — ${
                     Global.ProductName
                   }`;
+                  let keywords = that.ProductInfo.title;
+                  that.ProductInfo.tags.forEach(tag => {
+                    keywords = keywords + "," + tag.trim();
+                  });
+                  const tag = document.createElement("meta");
+                  tag.setAttribute("name", "keywords");
+                  tag.setAttribute("content", keywords);
+                  document.head.appendChild(tag);
                   // console.log(that.ProductInfo);
                   that.headImg = that.ProductInfo.images[0];
                   that.isSeller = userAddress == that.ProductInfo.seller;
@@ -185,8 +197,16 @@ export default {
         console.log(r.data.length);
         that.sellerCompletedNumber = r.data.length;
       });
+    },
+    showFullPic() {
+      location.href = this.headImg;
     }
   },
+  computed: {
+    headImgWidth: function() {
+      return window.innerWidth;
+    }
+  }
 };
 </script>
 <style lang="stylus">
@@ -195,6 +215,7 @@ export default {
   .main
     position relative
     background-color #f0f0f0
+    height 100% !important
     img
       display block
       width 100vw
