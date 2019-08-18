@@ -52,6 +52,16 @@
             </template>
           </GoodsListItem>
         </div>
+        <div
+          v-for="i in Array.from(
+            {
+              length: 4
+            },
+            (x, i) => i
+          )"
+          :key="parseInt(i)"
+          class="good-container stuff"
+        ></div>
       </div>
       <div class="end" v-if="goodList.length">~ No More ~</div>
     </div>
@@ -70,12 +80,8 @@ import GoodsListItem from "@/components/GoodsListItem.vue";
 import LoadingMask from "@/components/LoadingMask.vue";
 import RespImg from "@/components/RespImg.vue";
 import axios from "axios";
-import global from "@/global.js";
-import {
-  queryOptions,
-  makeQuery,
-  compare
-} from "@/global.js";
+import Global from "@/global.js";
+import { queryOptions, makeQuery, compare } from "@/global.js";
 
 export default {
   name: "home",
@@ -87,7 +93,7 @@ export default {
       all: this.$route.params.all,
       search: this.$route.params.search,
       goodList: [],
-      popularTags: global.popularTags,
+      popularTags: Global.popularTags,
       searchTerm: ""
     };
   },
@@ -112,7 +118,7 @@ export default {
               must: [
                 {
                   match: {
-                    abiShaList: global.abiShaList
+                    abiShaList: Global.abiShaList
                   }
                 },
                 {
@@ -132,7 +138,7 @@ export default {
               must: [
                 {
                   match: {
-                    abiShaList: global.abiShaList
+                    abiShaList: Global.abiShaList
                   }
                 },
                 {
@@ -167,7 +173,13 @@ export default {
             if (
               obj.functionData.info[7] != 0 &&
               obj.functionData.info[6] != "" &&
-              obj.functionData.info[0] != 0
+              obj.functionData.info[0] != 0 &&
+              Global.blackAddrs
+                .map(o => o.toLowerCase())
+                .indexOf(obj.contractAddress.toLowerCase()) === -1 &&
+              Global.blackAddrs
+                .map(o => o.toLowerCase())
+                .indexOf(obj.functionData.info[8].toLowerCase()) === -1
             )
               return obj;
           });
@@ -218,11 +230,12 @@ export default {
     margin (20/16)rem 0
     padding 0
     list-style none
-    display flex
     li
       margin-right (15/16)rem
-      &:last-child
-        margin-right 0
+      white-space nowrap
+      float left
+      display block
+      margin-bottom (10/16)rem
     .tag-link
       display block
       height (24/16)rem
@@ -254,6 +267,8 @@ export default {
       @media screen and (min-width: 1000px)
         good-margin = (80/16) rem
         width "calc((100% - %s)/5)" % good-margin
+    .good-container.stuff
+      margin-bottom 0 !important
   .search-field
     position relative
     margin-top (15/16)rem

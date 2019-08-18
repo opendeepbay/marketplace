@@ -23,12 +23,17 @@ export default {
   USDBuyLink:
     "https://stripe.supernodecapital.com/checkout?currency=usd&contract_addr=",
   escrowPeriod: 60 * 60 * 24 * 21,
+  chainId: 18,
   HttpProvider: "https://rpc.cybermiles.io:8545",
   DAOaddr: "0xFad845108A5fce593a8Ff9d2BeC6c812DEE27661",
   ProductName: "OpenBay",
   USDOsupportEmail: "usdo@supernodecapital.com",
   badGuys: [
     "0x304d667F6EF83D699091A2e85661C06E2f1e44dc"
+  ],
+  //blacklist of both listing addresses and account addresses
+  blackAddrs: [
+    "0xEa6B976E029E9229cE403653301262E1841a63a2"
   ]
 };
 
@@ -225,6 +230,8 @@ function goDebug(debugInfo) {
   let connector = "";
   if (router.mode == "hash") connector = "#/";
   else if (router.mode == "history") connector = "";
+
+  console.log(Object.keys(debugInfo))
   let debugURL =
     window.location.origin +
     config.publicPath +

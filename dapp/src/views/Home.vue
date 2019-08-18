@@ -1,10 +1,9 @@
 <template>
   <div>
-    <LoadingMask v-if="loading"></LoadingMask>
+    <!-- <LoadingMask v-if="loading"></LoadingMask> -->
     <div class="home" ref="home">
       <div class="pc-header">
         <img src="./../assets/logo.png" class="logo" style="width:160px" />
-        <!-- <h1>{{ DAppName }}</h1> -->
         <span class="about-entry" @click="$router.push('/about')">About?</span>
         <div class="search-field">
           <div class="onsearch-field">
@@ -45,20 +44,12 @@
       <div class="cate-title">
         <h2>Latest</h2>
         <router-link to="/all/unsold" class="more"
-          >View all ({{
-            goodList.filter(obj => {
-              return !obj.sold;
-            }).length
-          }})></router-link
+          >View all ({{ latestGoodList.length }})></router-link
         >
       </div>
       <div class="goods-list">
         <div
-          v-for="good in goodList
-            .filter(obj => {
-              return !obj.sold;
-            })
-            .slice(0, maxDisplayItems)"
+          v-for="good in latestGoodList.slice(0, maxDisplayItems)"
           :key="good.key"
           class="good-container"
           :style="{ height: containerHeight + 'px' }"
@@ -79,24 +70,40 @@
             </template>
           </GoodsListItem>
         </div>
+        <div
+          v-for="i in Array.from(
+            {
+              length: maxDisplayItems - latestGoodList.length
+            },
+            (x, i) => i
+          )"
+          :key="parseInt(i)"
+          :style="{ height: containerHeight + 'px' }"
+          class="good-container"
+        >
+          <GoodsListItem
+            v-bind="{
+              contractAddr: null,
+              title: null
+            }"
+            v-if="latestGoodList.length === 0"
+          >
+            <RespImg v-bind:division="itemsPerLine" />
+            <template v-slot:price>
+              $
+            </template>
+          </GoodsListItem>
+        </div>
       </div>
       <div class="cate-title">
         <h2>Just Sold</h2>
         <router-link to="/all/sold" class="more"
-          >View all ({{
-            goodList.filter(obj => {
-              return obj.sold;
-            }).length
-          }})></router-link
+          >View all ({{ soldGoodList.length }})></router-link
         >
       </div>
       <div class="goods-list">
         <div
-          v-for="good in goodList
-            .filter(obj => {
-              return obj.sold;
-            })
-            .slice(0, maxDisplayItems)"
+          v-for="good in soldGoodList.slice(0, this.maxDisplayItems)"
           :key="good.key"
           class="good-container"
           :style="{ height: containerHeight + 'px' }"
@@ -118,6 +125,31 @@
             </template>
           </GoodsListItem>
         </div>
+        <div
+          v-for="i in Array.from(
+            {
+              length: maxDisplayItems - soldGoodList.length
+            },
+            (x, i) => i
+          )"
+          :key="parseInt(i)"
+          class="good-container"
+          :style="{ height: containerHeight + 'px' }"
+        >
+          <GoodsListItem
+            sold="true"
+            v-bind="{
+              contractAddr: null,
+              title: null
+            }"
+            v-if="soldGoodList.length === 0"
+          >
+            <RespImg v-bind:division="itemsPerLine" />
+            <template v-slot:price>
+              $
+            </template>
+          </GoodsListItem>
+        </div>
       </div>
     </div>
     <Footer></Footer>
@@ -129,15 +161,10 @@
 import Footer from "@/components/Footer.vue";
 import GoodsListItem from "@/components/GoodsListItem.vue";
 import RespImg from "@/components/RespImg.vue";
-import LoadingMask from "@/components/LoadingMask.vue";
+// import LoadingMask from "@/components/LoadingMask.vue";
 import axios from "axios";
 import Global from "@/global.js";
-import {
-  web3Pass,
-  queryOptions,
-  makeQuery,
-  compare
-} from "@/global.js";
+import { web3Pass, queryOptions, makeQuery, compare } from "@/global.js";
 
 export default {
   name: "home",
@@ -147,18 +174,22 @@ export default {
       goodList: [],
       popularTags: Global.popularTags,
       searchTerm: "",
-      onSearch: false
+      onSearch: false,
+      homePanelWidth: window.innerWidth
     };
   },
   components: {
     Footer,
     GoodsListItem,
-    RespImg,
-    LoadingMask
+    RespImg
+    // LoadingMask
   },
   created() {
     this.initGoodList();
     this.$ga.page("/");
+  },
+  mounted() {
+    this.homePanelWidth = this.$refs.home.clientWidth;
   },
   methods: {
     initGoodList() {
@@ -171,11 +202,17 @@ export default {
           .sort(compare("blockNumber"))
           .reverse()
           .filter(obj => {
-            //remove those whose usd price is 0 or the img url is empty or ulisted
+            //remove those whose USD price is 0 or the img url is empty or ulisted or in BlackList
             if (
               obj.functionData.info[7] != 0 &&
               obj.functionData.info[6] != "" &&
-              obj.functionData.info[0] != 0
+              obj.functionData.info[0] != 0 &&
+              Global.blackAddrs
+                .map(o => o.toLowerCase())
+                .indexOf(obj.contractAddress.toLowerCase()) === -1 &&
+              Global.blackAddrs
+                .map(o => o.toLowerCase())
+                .indexOf(obj.functionData.info[8].toLowerCase()) === -1
             )
               return obj;
           });
@@ -190,6 +227,7 @@ export default {
           });
         });
         console.log(this.goodList);
+        console.log(sortedData);
       });
     },
     goSearch() {
@@ -204,15 +242,26 @@ export default {
   },
   computed: {
     maxDisplayItems: function() {
-      if (window.innerWidth > 1000) return 6;
-      else if (window.innerWidth > 800) return 5;
+      if (window.innerWidth > 1000) return 10;
+      else if (window.innerWidth > 800) return 8;
+      else if (window.innerWidth > 600) return 6;
       else return 4;
     },
     DAppName: function() {
       return Global.ProductName;
     },
+    latestGoodList: function() {
+      return this.goodList.filter(obj => {
+        return !obj.sold;
+      });
+    },
+    soldGoodList: function() {
+      return this.goodList.filter(obj => {
+        return obj.sold;
+      });
+    },
     containerHeight: function() {
-      let parentWidth = this.$refs.home.clientWidth;
+      let parentWidth = this.homePanelWidth;
       let homePadding = 15;
       let lineHeight = 18;
       if (window.innerWidth > 1200) homePadding = 120;
@@ -338,6 +387,7 @@ export default {
     border 0
   .cate-title
     display flex
+    width 100%
     justify-content space-between
     align-items center
     margin (20/16)rem 0 (15/16)rem
@@ -353,12 +403,12 @@ export default {
     margin 0
     padding 0
     list-style none
-    display flex
-    overflow scroll
     li
       margin-right (15/16)rem
-      &:last-child
-        margin-right 0
+      white-space nowrap
+      float left
+      display block
+      margin-bottom (10/16)rem
     .tag-link
       display block
       height (24/16)rem
