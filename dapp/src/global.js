@@ -29,7 +29,11 @@ export default {
   ProductName: "OpenBay",
   USDOsupportEmail: "usdo@supernodecapital.com",
   badGuys: [
-    "0x304d667F6EF83D699091A2e85661C06E2f1e44dc"
+    "0x304d667F6EF83D699091A2e85661C06E2f1e44dc",
+    "0xbF2683343c659f7696f8b7d64abd9CE29ad803ee",
+    "0x23e8B8ec722a335B057F65cD314495153c500ECC",
+    "0x6538C2ABA85B1EecE8F7236006cdc69E48fE8a52",
+    "0x74CD8e53A116182E7094Ab5c815517891A6d25D3"
   ],
   //blacklist of both listing addresses and account addresses
   blackAddrs: [
