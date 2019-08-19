@@ -1,42 +1,6 @@
 <template>
   <div>
-    <LoadingMask v-if="loading"></LoadingMask>
     <div class="catalog-goods-list">
-      <div class="search-field">
-        <input
-          type="search"
-          placeholder="Enter a search term or #tag"
-          v-model="searchTerm"
-          v-on:keyup.enter="goSearch"
-        />
-        <button @click="goSearch">Go</button>
-      </div>
-      <ul class="tags" v-if="tag !== undefined">
-        <li v-for="popularTag in popularTags" :key="popularTag.key">
-          <router-link
-            :to="`/tag/` + popularTag"
-            class="tag-link active"
-            v-if="popularTag == tag"
-            replace
-            >{{ popularTag }}</router-link
-          >
-          <router-link
-            :to="`/tag/` + popularTag"
-            class="tag-link"
-            replace
-            v-else
-          >
-            {{ popularTag }}
-          </router-link>
-        </li>
-      </ul>
-      <div
-        class="search-result"
-        v-if="search !== undefined || all !== undefined"
-      >
-        Total "<em>{{ goodList.length }}</em
-        >" result
-      </div>
       <div class="goods-list">
         <div v-for="good in goodList" :key="good.key" class="good-container">
           <GoodsListItem
@@ -65,18 +29,12 @@
       </div>
       <div class="end" v-if="goodList.length">~ No More ~</div>
     </div>
-    <div class="empty-list" v-if="goodList.length === 0">
-      <div class="text">Sorry, we can’t find it</div>
-      <router-link to="/">Back Home</router-link>
-    </div>
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Footer from "@/components/Footer.vue";
-import GoodsListItem from "@/components/GoodsListItem.vue";
+import GoodsListItem from "@/components/GoodsListItemForCategory.vue";
 import LoadingMask from "@/components/LoadingMask.vue";
 import RespImg from "@/components/RespImg.vue";
 import axios from "axios";
@@ -88,17 +46,14 @@ export default {
   data() {
     return {
       loading: true,
-      tag: this.$route.params.tag,
-      cata: this.$route.params.cata,
-      all: this.$route.params.all,
-      search: this.$route.params.search,
+      tag: undefined,
+      all: undefined,
+      search: window.location.href.match(/\/categories\/(\w+)\.html$/)[1],
       goodList: [],
-      popularTags: Global.popularTags,
       searchTerm: ""
     };
   },
   components: {
-    Footer,
     GoodsListItem,
     RespImg,
     LoadingMask
@@ -111,7 +66,7 @@ export default {
     initGoodList() {
       var that = this;
       var queryMarketplaceABI = "";
-      if (this.$route.params.tag !== undefined) {
+      if (this.tag !== undefined) {
         queryMarketplaceABI = {
           query: {
             bool: {
@@ -131,7 +86,7 @@ export default {
             }
           }
         };
-      } else if (this.$route.params.search !== undefined) {
+      } else if (this.search !== undefined) {
         queryMarketplaceABI = {
           query: {
             bool: {
@@ -156,10 +111,10 @@ export default {
             }
           }
         };
-      } else if (this.$route.params.all !== undefined) {
-        if (this.$route.params.all == "sold") {
+      } else if (this.all !== undefined) {
+        if (this.all == "sold") {
           queryMarketplaceABI = makeQuery([2, 3, 4, 5]);
-        } else if (this.$route.params.all == "unsold") {
+        } else if (this.all == "unsold") {
           queryMarketplaceABI = makeQuery([1]);
         }
       }
@@ -183,6 +138,7 @@ export default {
             )
               return obj;
           });
+        console.log(sortedData);
         sortedData.forEach(function(item) {
           that.goodList.push({
             blkNumber: item.blockNumber,
@@ -195,23 +151,6 @@ export default {
         });
         console.log(this.goodList);
       });
-    },
-    goSearch() {
-      if (this.searchTerm.trim() == "" || this.searchTerm.trim() == "#") return;
-      if (this.searchTerm.slice(0, 1) == "#")
-        this.$router.replace("/tag/" + this.searchTerm.slice(1));
-      else this.$router.replace("/search/" + this.searchTerm);
-    }
-  },
-  watch: {
-    $route(to) {
-      // console.log("change",from.params.search,to.params.search)
-      // console.log(this.$router)
-      this.search = to.params.search;
-      this.tag = to.params.tag;
-      this.searchTerm = this.search || (this.tag ? "#" + this.tag : this.tag);
-      this.goodList.length = 0;
-      this.initGoodList();
     }
   }
 };
@@ -250,7 +189,6 @@ export default {
         background-color #ff3f0f
         color #ffffff
   .goods-list
-    width 100%
     display flex
     flex-wrap wrap
     justify-content space-between
