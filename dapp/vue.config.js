@@ -8,8 +8,8 @@ module.exports = {
     },
     cate_watch: {
       entry: 'src/categories.js',
-      template: 'public/categories/watch.html',
-      filename: 'categories/watch.html'
+      template: 'public/categories/cmt.html',
+      filename: 'categories/cmt.html'
     }
   },
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/"
