@@ -127,7 +127,7 @@ export default {
             if (
               obj.functionData.info[7] != 0 &&
               obj.functionData.info[6] != "" &&
-              obj.functionData.info[0] != 0 &&
+              obj.functionData.info[0] == 1 &&
               Global.blackAddrs
                 .map(o => o.toLowerCase())
                 .indexOf(obj.contractAddress.toLowerCase()) === -1 &&
@@ -137,7 +137,7 @@ export default {
             )
               return obj;
           });
-        console.log(sortedData);
+        sortedData = sortedData.slice(0, 6)
         sortedData.forEach(function(item) {
           that.goodList.push({
             blkNumber: item.blockNumber,
