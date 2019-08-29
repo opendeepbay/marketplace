@@ -39,7 +39,10 @@ export default {
     "0x23e8B8ec722a335B057F65cD314495153c500ECC",
     "0x6538C2ABA85B1EecE8F7236006cdc69E48fE8a52",
     "0x74CD8e53A116182E7094Ab5c815517891A6d25D3"
-  ]
+  ],
+  categoryWhiteSenders: {
+    cmt: ["0xf160c52d63550bfbf4d2ec71402e46f391c35382", "0x53f61cca40185168504c3ea96e220a318986ffb8"]
+  }
 };
 
 function createHandler(contract, obj, bin, fromUser, that) {
@@ -238,7 +241,7 @@ function goDebug(debugInfo) {
   console.log(Object.keys(debugInfo));
   let queryParams = "?errorURL=" + window.location.href;
   Object.keys(debugInfo).map(key => {
-    console.log(debugInfo[key].toString())
+    console.log(debugInfo[key].toString());
     queryParams = queryParams + "&" + key + "=" + debugInfo[key].toString();
   });
   console.log(queryParams);
