@@ -30,7 +30,8 @@ export default {
   USDOsupportEmail: "usdo@supernodecapital.com",
   badGuys: [
     "0x304d667F6EF83D699091A2e85661C06E2f1e44dc",
-    "0xac027e3eedefc6efb07d19b9ed596cc36eff00dd"
+    "0xac027e3eedefc6efb07d19b9ed596cc36eff00dd",
+    "0x1b1faed1f32c47d4768d596027f38d41269df62e"
   ],
   //blacklist of both listing addresses and account addresses
   blackAddrs: [
