@@ -37,6 +37,9 @@ export default {
   ],
   //blacklist of both listing addresses and account addresses
   blackAddrs: [
+    "0x304d667F6EF83D699091A2e85661C06E2f1e44dc",
+    "0xac027e3eedefc6efb07d19b9ed596cc36eff00dd",
+    "0x1b1faed1f32c47d4768d596027f38d41269df62e", // badguys
     "0xEa6B976E029E9229cE403653301262E1841a63a2",
     "0xbF2683343c659f7696f8b7d64abd9CE29ad803ee",
     "0x23e8B8ec722a335B057F65cD314495153c500ECC",
