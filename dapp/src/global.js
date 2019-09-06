@@ -16,6 +16,8 @@ export default {
   popularTags: ["crypto", "pokemon", "phone", "watch", "toy"],
   abiShaList:
     "0xf2d55a1e2ceaf0e1511115e100490464fcb8d62993860c1251bd0c56fa16df9a",
+  abiShaList2:
+    "0x5639716c7d6868b11fcad68e03b7285506e4c8f5a2ba0c824d5c1dc7b697470c",
   eeEndpoint: "https://openbay.search.secondstate.co/api/es_search",
   submitESEndpoint: "https://openbay.search.secondstate.co",
   USDaddr: "0x9ae9de5eb56fe212a3088fb636349553ca60f238",
@@ -302,12 +304,10 @@ function makeQuery(statusArr, sellerAddress = null, buyerAddress = null) {
         must: [
           {
             bool: {
-              should: []
-            }
-          },
-          {
-            match: {
-              abiShaList: Global.abiShaList
+              should: [
+                  { match: { abiShaList: Global.abiShaList } },
+                  { match: { abiShaList: Global.abiShaList2 } }
+              ]
             }
           },
           {
