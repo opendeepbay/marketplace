@@ -17,7 +17,7 @@ export default {
   abiShaList:
     "0xf2d55a1e2ceaf0e1511115e100490464fcb8d62993860c1251bd0c56fa16df9a",
   eeEndpoint: "https://openbay.search.secondstate.co/api/es_search",
-  submitESEndpoint: "https://openbay.search.secondstate.io",
+  submitESEndpoint: "https://openbay.search.secondstate.co",
   USDaddr: "0x9ae9de5eb56fe212a3088fb636349553ca60f238",
   USDunit: "USDO",
   USDBuyLink:
