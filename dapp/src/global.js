@@ -14,12 +14,10 @@ Vue.use(VueAnalytics, {
 
 export default {
   popularTags: ["crypto", "pokemon", "phone", "watch", "toy"],
-  abiShaList2:
-    "0xf2d55a1e2ceaf0e1511115e100490464fcb8d62993860c1251bd0c56fa16df9a",
   abiShaList:
-    "0x5639716c7d6868b11fcad68e03b7285506e4c8f5a2ba0c824d5c1dc7b697470c",
-  eeEndpoint: "https://openbay.search.secondstate.co/api/es_search",
-  submitESEndpoint: "https://openbay.search.secondstate.co",
+    "0x3f6b217f237143ae5b48a1867afec0ba8cc46f9904cd8ca6141292f1cb2efd4c",
+  eeEndpoint: "https://openbay1.search.secondstate.co/api/es_search",
+  submitESEndpoint: "https://openbay1.search.secondstate.co",
   USDaddr: "0x9ae9de5eb56fe212a3088fb636349553ca60f238",
   USDunit: "USDO",
   USDBuyLink:
@@ -39,21 +37,7 @@ export default {
   blackAddrs: [
     "0x304d667F6EF83D699091A2e85661C06E2f1e44dc",
     "0xac027e3eedefc6efb07d19b9ed596cc36eff00dd",
-    "0x1b1faed1f32c47d4768d596027f38d41269df62e", // badguys
-    "0xEa6B976E029E9229cE403653301262E1841a63a2",
-    "0xbF2683343c659f7696f8b7d64abd9CE29ad803ee",
-    "0x23e8B8ec722a335B057F65cD314495153c500ECC",
-    "0x6538C2ABA85B1EecE8F7236006cdc69E48fE8a52",
-    "0x74CD8e53A116182E7094Ab5c815517891A6d25D3",
-    "0x010d81fceE1368030Bc34AD410732FE79B99b2c0", // removed by DAO
-    "0xbB3aA78A37ACB5D8c4e1F52Dd1B69271A715C784",
-    "0xF2c7276f0D68dd29A7fc560B64F47a40aAfB256D",
-    "0x454A5d56dE04867A4B6a4fB16b51119071397A4B",
-    "0x50887C6ADC0356cbc9a9B389E9d2837cABB2d86a",
-    "0xA72eD88a86DE3347968125CD9493eFCD13Be8aa5", // guns
-    "0x850a54CFdeb3e7A116a5fc41c382787d276bE89A",
-    "0x293B8d7c9a5Cf6463d4229d2D81c0EE5DB341C76",
-    "0xa008ae21157DCd8F54784297369dB9C712cf2f4d"
+    "0x1b1faed1f32c47d4768d596027f38d41269df62e"
   ],
   categoryWhiteSenders: {
     cmt: ["0xf160c52d63550bfbf4d2ec71402e46f391c35382", "0x53f61cca40185168504c3ea96e220a318986ffb8"]
@@ -320,11 +304,8 @@ function makeQuery(statusArr, sellerAddress = null, buyerAddress = null) {
             }
           },
           {
-            bool: {
-              should: [
-                  { match: { abiShaList: Global.abiShaList } },
-                  { match: { abiShaList: Global.abiShaList2 } }
-              ]
+            match: {
+              abiShaList: Global.abiShaList
             }
           },
           {
