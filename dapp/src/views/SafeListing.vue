@@ -37,7 +37,7 @@ import Global from "@/global.js";
 import { goDebug } from "@/global.js";
 
 export default {
-  name: "listing",
+  name: "safelisting",
   components: {
     ListingInfo,
     SellerNav,
@@ -63,15 +63,11 @@ export default {
     };
   },
   created() {
-    try {
-      window.web3.cmt;
-    } catch (e) {
-      var Web3 = require("web3-cmt");
-      window.web3 = new Web3(
-        new Web3.providers.HttpProvider(Global.HttpProvider)
-      );
-    }
-    this.$ga.page("/listing");
+    var Web3 = require("web3-cmt");
+    window.web3 = new Web3(
+      new Web3.providers.HttpProvider(Global.HttpProvider)
+    );
+    this.$ga.page("/safelisting");
     this.initProductInfo();
   },
   methods: {
@@ -82,41 +78,29 @@ export default {
         if (!window.web3.isAddress(contract_address)) {
           that.$router.push(`/`);
         }
-        window.web3.cmt.getAccounts(function(e, address) {
+        var contract = window.web3.cmt.contract(Contracts.Listing.abi);
+        var instance = contract.at(contract_address);
+        that.instance = instance;
+        instance.info(function(e, r) {
           if (e) {
             goDebug({
-              callMethod: "getAccounts",
+              callMethod: "instance.info",
               error: e
             });
           } else {
-            that.userAddress = address.toString();
-
-            var contract = window.web3.cmt.contract(Contracts.Listing.abi);
-            var instance = contract.at(contract_address);
-            that.instance = instance;
-            instance.info(function(e, r) {
-              if (e) {
-                that.$router.replace(`/safelisting/${contract_address}`);
-                // goDebug({
-                //   callMethod: "instance.info",
-                //   error: e
-                // });
-              } else {
-                that.ProductInfo = {
-                  status: r[0],
-                  title: r[1],
-                  desc: r[2],
-                  tags: r[3].split("#").filter(obj => obj.trim() != ""),
-                  escrowDuration: r[5],
-                  images: r[6].split(","),
-                  USDprice: (parseInt(r[7]) / 100).toString(),
-                  seller: r[8].toString(),
-                  buyerAddress: r[9].toString(),
-                  contact: r[4]
-                };
-                that.setMetaInfo();
-              }
-            });
+            that.ProductInfo = {
+              status: r[0],
+              title: r[1],
+              desc: r[2],
+              tags: r[3].split("#").filter(obj => obj.trim() != ""),
+              escrowDuration: r[5],
+              images: r[6].split(","),
+              USDprice: (parseInt(r[7]) / 100).toString(),
+              seller: r[8].toString(),
+              buyerAddress: r[9].toString(),
+              contact: r[4]
+            };
+            that.setMetaInfo();
           }
         });
       } catch (e) {
