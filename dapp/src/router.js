@@ -35,7 +35,7 @@ export default new Router({
       name: "home",
       component: Home,
       meta: {
-        title: `${Global.ProductName}`
+        title: "OpenBay - the World's first decentralized and crypto peer 2 peer marketplace"
       }
     },
     {
@@ -131,7 +131,7 @@ export default new Router({
       component: CatalogPage,
       meta: {
         transitionName: "slideX",
-        title: "Buy and Sell {tag} on Market Place"
+        title: "Buy and Sell {tag} on OpenBay - the World's first decentralized peer 2 peer marketplace"
       }
     },
     {
