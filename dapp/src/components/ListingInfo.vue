@@ -1,5 +1,8 @@
 <template>
   <div class="listing-info">
+    <a class="back-link" @click="$router.go(-1)">
+      <img src="../assets/imgs/back2.svg" />
+    </a>
     <div
       class="main"
       :style="{ height: headImgWidth + 'px' }"
@@ -118,7 +121,12 @@ export default {
   width 80%
   height (16/16)rem
 .listing-info
-  margin-bottom (50/16)rem
+  margin-bottom (2/16)rem
+  .back-link
+    position absolute
+    z-index 1
+    top 0.5rem
+    left 1rem
   .main
     position relative
     background-color #f0f0f0
