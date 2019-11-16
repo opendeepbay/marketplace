@@ -59,7 +59,7 @@
         />
       </div>
       <div class="form-group">
-        <label for="tags">Tags(max. 5 tags)</label>
+        <label for="tags">Tags (max. 5 tags)</label>
         <input
           type="text"
           class="form-control"
@@ -86,7 +86,8 @@
         />
       </div>
       <div class="form-group">
-        <label for="amount">Price(Postage included)</label>
+        <p>Please set a price either in USD or in CMT</p>
+        <label for="amount">Total USD price (S&amp;H + tax included)</label>
         <div>
           <input
             type="number"
@@ -98,25 +99,26 @@
           <div class="price-unit-container">
             <span class="price-unit">{{ USDunit }}</span>
           </div>
-          <span class="price-tip">1 {{ USDunit }} ≈ 1 USD</span>
+          <span class="price-tip">1 {{ USDunit }} ≈ 1 USD. Buy with credit card. <a target="_blank" href="/withdraw-usdo-guide">how to exchange</a></span>
+          <small class="alert" v-if="emptyPrice">
+            A USD price is required.
+          </small>
         </div>
-        <small class="alert" v-if="emptyPrice">
-          Price must be set.
-        </small>
       </div>
-      <div class="form-group" v-if="edit">
-        <label for="CMTamount">Price2(optional)</label>
+      <div class="form-group">
+        <label for="CMTamount">Or total CMT price</label>
         <div>
           <input
             type="number"
             class="form-control"
             id="CMTamount"
-            min="0.0001"
+            min="1"
             v-model="CMTamount"
           />
           <div class="price-unit-container">
             <span class="price-unit">CMT</span>
           </div>
+          <span class="price-tip">Better privacy and anonymity for buyers</span>
         </div>
       </div>
       <div class="form-group">
@@ -128,7 +130,7 @@
           autocorrect="off"
           autocapitalize="off"
           id="contact"
-          placeholder="Leave your email(required) and/or other contact info like telegram The buyers will contact you with this info and send you the receiving address, etc."
+          placeholder="Leave your email (required) and/or other contact info like telegram The buyers will contact you with this info and send you the receiving address, etc."
           v-model="contact"
         />
         <small class="alert" v-if="contactIsEmpty">
@@ -339,29 +341,37 @@ export default {
         this.contactIsEmpty = true;
         return;
       }
+      if (!(this.amount >0)) {
+        this.emptyPrice = true;
+        return;
+      }
+      
       // console.log(that.imageUrls.length, that.images.length, that.imageUrls);
       //wait until the pics have been uploaded to the cloud
       var checkUploadImg = function() {
         if (that.imageUrls.length == that.images.length) {
           var imageUrls = that.uploadedImgs.concat(that.imageUrls).join(",");
           // console.log(imageUrls);
-          var amount2Addr = that.crc20;
-          var amount2 = parseInt(Math.round(parseFloat(that.amount) * 100)); // the OPB is 2 decimals. //Math.round() is to fix the problem: 19.99 * 100 = 1998.9999999999998
+          
+          var amountAddr = that.crc20;
+          var amount = parseInt(Math.round(parseFloat(that.amount) * 100)); // the OPB is 2 decimals. //Math.round() is to fix the problem: 19.99 * 100 = 1998.9999999999998
+          var amount2Addr = amountAddr;
+          var amount2 = amount;
           if (that.CMTamount > 0) {
             amount2Addr = "0x0000000000000000000000000000000000000000";
             amount2 = window.web3.toWei(that.CMTamount);
           }
-          // console.log(that.CMTamount, amount2Addr, parseInt(amount2));
+          
           that.editModeInfo.instance.updateListing(
             that.title,
             that.desc,
             that.tags,
             imageUrls,
             that.contact,
-            that.crc20,
-            parseInt(Math.round(parseFloat(that.amount) * 100)), // the OPB is 2 decimals,
+            amountAddr,
+            amount,
             amount2Addr,
-            parseInt(amount2),
+            amount2,
             "", //TODO: JSON_SHIPPING_COST. It should fetch from user input in the future.
             {
               gas: "99990000",
@@ -386,7 +396,7 @@ export default {
         this.emptyPics = true;
         return;
       }
-      if (this.amount == "" || this.amount == null) {
+      if (!(this.amount >0)) {
         this.emptyPrice = true;
         return;
       }
@@ -412,6 +422,16 @@ export default {
           var checkUploadImg = function() {
             if (that.imageUrls.length == that.images.length) {
               var imageUrls = that.imageUrls.join(",");
+              
+              var amountAddr = that.crc20;
+              var amount = parseInt(Math.round(parseFloat(that.amount) * 100)); // the OPB is 2 decimals. //Math.round() is to fix the problem: 19.99 * 100 = 1998.9999999999998
+              var amount2Addr = amountAddr;
+              var amount2 = amount;
+              if (that.CMTamount > 0) {
+                amount2Addr = "0x0000000000000000000000000000000000000000";
+                amount2 = window.web3.toWei(that.CMTamount);
+              }
+
               var newItem = {
                 title: that.title,
                 desc: that.desc,
@@ -420,10 +440,10 @@ export default {
                 imageUrls: imageUrls,
                 contact: that.contact,
                 escrowPeriod: that.escrowPeriod,
-                crc20: that.crc20,
-                amount: parseInt(Math.round(parseFloat(that.amount) * 100)),
-                crc20_2: that.crc20,
-                amount_2: parseInt(Math.round(parseFloat(that.amount) * 100))
+                crc20: amountAddr,
+                amount: amount,
+                crc20_2: amount2Addr,
+                amount_2: amount2
               };
               var newContract = window.web3.cmt.contract(Contracts.Listing.abi);
               var bin = Contracts.Listing.bin;
@@ -464,14 +484,10 @@ export default {
       }
     },
     amount: function() {
-      if (
-        this.amount === undefined ||
-        this.amount === null ||
-        this.amount === ""
-      ) {
-        this.emptyPrice = true;
-      } else {
+      if (this.amount > 0) {
         this.emptyPrice = false;
+      } else {
+        this.emptyPrice = true;
       }
     },
     contact: function() {

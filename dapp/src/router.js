@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Listings from "./views/Listings.vue";
 import CreatePage from "./views/Create.vue";
 import Create2Page from "./views/Create2.vue";
 import ListingPage from "./views/ForwardListing.vue";
@@ -31,12 +32,17 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "/market",
       name: "home",
       component: Home,
       meta: {
         title: "OpenBay - the World's first decentralized and crypto peer 2 peer marketplace"
       }
+    },
+    {
+      path: "/listings",
+      name: "listings",
+      component: Listings
     },
     {
       path: "/about",
