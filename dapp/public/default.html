@@ -104,11 +104,6 @@ html {
   padding: 0 16px;
 }
 
-.container::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
 
 .title {
   color: grey;
@@ -136,8 +131,8 @@ html {
 <h1 align="center">Face Masks</h1>
 <h3 align="center">Buy face masks in normal prices</h3>
 <br>
-
-<div class="row">
+  
+<div class="row" style="justify-content:space-evenly;">
   <div class="column">
     <div class="card">
       <img src="/imgs/medical masks.jpg" alt="medical masks" style="width:100%">
