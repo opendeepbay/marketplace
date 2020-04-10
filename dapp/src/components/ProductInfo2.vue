@@ -289,16 +289,16 @@ export default {
       }
 
       var imageUrls = "";
-      if (imageUrl01) {
+      if (that.imageUrl01) {
           imageUrls = imageUrls + that.imageUrl01;
       }
-      if (imageUrl02) {
+      if (that.imageUrl02) {
           imageUrls = imageUrls + "," + that.imageUrl02;
       }
-      if (imageUrl03) {
+      if (that.imageUrl03) {
           imageUrls = imageUrls + "," + that.imageUrl03;
       }
-      if (imageUrl04) {
+      if (that.imageUrl04) {
           imageUrls = imageUrls + "," + that.imageUrl04;
       }
       // console.log(imageUrls);
