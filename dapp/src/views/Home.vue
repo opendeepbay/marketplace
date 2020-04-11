@@ -119,7 +119,7 @@ export default {
       else this.$router.push("/search/" + this.searchTerm);
     },
     goCreate() {
-      if (web3Pass(this, "/create")) this.$router.push("/create");
+      if (web3Pass(this, "/create2")) this.$router.push("/create2");
     }
   },
   computed: {
