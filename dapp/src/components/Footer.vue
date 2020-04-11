@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     goCreate() {
-      if (web3Pass(this, "/create")) this.$router.push("/create");
+      if (web3Pass(this, "/create2")) this.$router.push("/create2");
     },
     goProfile() {
       if (web3Pass(this, "/profile")) this.$router.push("/profile");
