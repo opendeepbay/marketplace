@@ -59,7 +59,8 @@
         <div class="col-xl-9 mx-auto">
           <h1 class="mb-5">Welcome to OpenBay!</h1>
           <p>OpenBay is a suite of decentralized e-commerce applications that are equitable, censorship-resistant, and privacy-preserving. OpenBay apps are built on the CyberMiles public blockchain. To take full advantage of OpenBay apps, get the CyberMiles mobile app or install the Venus extension on your Chrome brower.</p>
-          <p>Limited offers: <a href="https://www.openbay.io/50Pcs-Disposable-Medical-Face-Mask---Level-2-Barrier-Standard-Face-Masks/listing/0xf3a1721afd650dfb099331ee8694b15cdd9c2021
+          <p>Limited offers: <a href="https://www.openbay.io/Wireless-Digital-Finger-Pulse-Oximeter-With-Sleep,-Heart-Rate-Monitor/listing/0x73eb6d618d676696aeb94eba0317b2ce7653f83b
+">Oximeter</a>, <a href="https://www.openbay.io/50Pcs-Disposable-Medical-Face-Mask---Level-2-Barrier-Standard-Face-Masks/listing/0xf3a1721afd650dfb099331ee8694b15cdd9c2021
 ">Medical face masks</a>,  <a href="https://www.openbay.io/10PCS-KN95-particulate-respirator-N95-face-mask,-3M-N95-Alternative/listing/0xcc75515d302516bb213f7e73eb2090390356e316">KN95 masks</a></p>
           <p>
             <a href="https://app.cybermiles.io/" class="btn btn-info" style="margin-top:16px">CyberMiles mobile app</a>
@@ -103,7 +104,11 @@ html {
 .container {
   padding: 0 16px;
 }
-
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
 .title {
   color: grey;
@@ -132,7 +137,19 @@ html {
 <h3 align="center">Buy face masks in normal prices</h3>
 <br>
   
-<div class="row" style="justify-content:space-evenly;">
+<div class="row">
+  
+  <div class="column">
+    <div class="card">
+      <img src="/imgs/oximeter.jpg" alt="Mike" style="width:100%">
+      <div class="container">
+        <h2>Oximeter</h2>
+        <p>$35</p>
+        <p><button class="button" onclick="window.location.href='https://www.openbay.io/Wireless-Digital-Finger-Pulse-Oximeter-With-Sleep,-Heart-Rate-Monitor/listing/0x73eb6d618d676696aeb94eba0317b2ce7653f83b'">Buy now</button></p>
+      </div>
+    </div>
+  </div>
+  
   <div class="column">
     <div class="card">
       <img src="/imgs/medical masks.jpg" alt="medical masks" style="width:100%">
